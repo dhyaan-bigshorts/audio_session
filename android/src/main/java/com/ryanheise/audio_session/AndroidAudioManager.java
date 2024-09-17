@@ -266,13 +266,15 @@ public class AndroidAudioManager implements MethodCallHandler {
             }
             return result;
         }
-
-        private static Map<String, Object> encodeAudioDevice(AudioDeviceInfo device) {
+        
+        @RequiresApi(api = Build.VERSION_CODES.P)
+private static Map<String, Object> encodeAudioDevice(AudioDeviceInfo device) {
     Map<String, Object> deviceMap = new HashMap<>();
     deviceMap.put("id", device.getId());
     deviceMap.put("productName", device.getProductName());
     if (Build.VERSION.SDK_INT >= 28) {
-        deviceMap.put("address", device.getAddress());
+        //noinspection AndroidLintNewApi
+        deviceMap.put("address", device.getAddress());  // Only call getAddress() on API 28+
     }
     deviceMap.put("isSource", device.isSource());
     deviceMap.put("isSink", device.isSink());
