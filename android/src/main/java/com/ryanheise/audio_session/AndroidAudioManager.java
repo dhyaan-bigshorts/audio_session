@@ -268,20 +268,23 @@ public class AndroidAudioManager implements MethodCallHandler {
         }
 
         private static Map<String, Object> encodeAudioDevice(AudioDeviceInfo device) {
-            return mapOf(
-                "id", device.getId(),
-                "productName", device.getProductName(),
-                "address", device.getAddress(),
-                "isSource", device.isSource(),
-                "isSink", device.isSink(),
-                "sampleRates", device.getSampleRates(),
-                "channelMasks", device.getChannelMasks(),
-                "channelIndexMasks", device.getChannelIndexMasks(),
-                "channelCounts", device.getChannelCounts(),
-                "encodings", device.getEncodings(),
-                "type", device.getType()
-            );
-        }
+    Map<String, Object> deviceMap = new HashMap<>();
+    deviceMap.put("id", device.getId());
+    deviceMap.put("productName", device.getProductName());
+    if (Build.VERSION.SDK_INT >= 28) {
+        deviceMap.put("address", device.getAddress());
+    }
+    deviceMap.put("isSource", device.isSource());
+    deviceMap.put("isSink", device.isSink());
+    deviceMap.put("sampleRates", device.getSampleRates());
+    deviceMap.put("channelMasks", device.getChannelMasks());
+    deviceMap.put("channelIndexMasks", device.getChannelIndexMasks());
+    deviceMap.put("channelCounts", device.getChannelCounts());
+    deviceMap.put("encodings", device.getEncodings());
+    deviceMap.put("type", device.getType());
+    return deviceMap;
+}
+
 
         public Singleton(Context applicationContext) {
             this.applicationContext = applicationContext;
