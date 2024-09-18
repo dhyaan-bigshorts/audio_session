@@ -404,7 +404,7 @@ private static Map<String, Object> encodeAudioDevice(AudioDeviceInfo device) {
     } else {
         // Handle the case for lower API levels, maybe throw an exception or return a default value
         // Example: throw new IllegalStateException("getStreamMinVolume is not supported on API levels below 28.");
-         throw new RuntimeException("Requires API level " + level);
+         throw new RuntimeException("Requires API level " + 28);
     }
 }
 
