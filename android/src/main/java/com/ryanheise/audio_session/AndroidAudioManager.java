@@ -767,12 +767,18 @@ private static Map<String, Object> encodeAudioDevice(AudioDeviceInfo device) {
     }
 
     static ArrayList<Double> coordinate3fToList(MicrophoneInfo.Coordinate3F coordinate) {
-        ArrayList<Double> list = new ArrayList<>();
+    ArrayList<Double> list = new ArrayList<>();
+    if (Build.VERSION.SDK_INT >= 28) { // API level 28 corresponds to Android P
         list.add((double)coordinate.x);
         list.add((double)coordinate.y);
         list.add((double)coordinate.z);
-        return list;
+    } else {
+        // Handle the case for API levels below 28
+        // You might want to throw an exception or provide alternative logic
+        throw new UnsupportedOperationException("API level 28 or higher is required to access MicrophoneInfo.Coordinate3F fields.");
     }
+    return list;
+}
 
     static Long getLong(Object o) {
         return (o == null || o instanceof Long) ? (Long)o : Long.valueOf((Integer) o);
