@@ -266,8 +266,7 @@ public class AndroidAudioManager implements MethodCallHandler {
             }
             return result;
         }
-        
-        @RequiresApi(api = Build.VERSION_CODES.P)
+
 private static Map<String, Object> encodeAudioDevice(AudioDeviceInfo device) {
     Map<String, Object> deviceMap = new HashMap<>();
     deviceMap.put("id", device.getId());
@@ -400,9 +399,15 @@ private static Map<String, Object> encodeAudioDevice(AudioDeviceInfo device) {
             return audioManager.getStreamMaxVolume(streamType);
         }
         private Object getStreamMinVolume(int streamType) {
-            requireApi(28);
-            return audioManager.getStreamMinVolume(streamType);
-        }
+    if (Build.VERSION.SDK_INT >= 28) {
+        return audioManager.getStreamMinVolume(streamType);
+    } else {
+        // Handle the case for lower API levels, maybe throw an exception or return a default value
+        // Example: throw new IllegalStateException("getStreamMinVolume is not supported on API levels below 28.");
+         throw new RuntimeException("Requires API level " + level);
+    }
+}
+
         private Object getStreamVolume(int streamType) {
             return audioManager.getStreamVolume(streamType);
         }
