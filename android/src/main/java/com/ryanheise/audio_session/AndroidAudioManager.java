@@ -412,8 +412,15 @@ private static Map<String, Object> encodeAudioDevice(AudioDeviceInfo device) {
             return audioManager.getStreamVolume(streamType);
         }
         private Object getStreamVolumeDb(int streamType, int index, int deviceType) {
-            requireApi(28);
-            return audioManager.getStreamVolumeDb(streamType, index, deviceType);
+
+            if (Build.VERSION.SDK_INT >= 28) {
+        return audioManager.getStreamVolumeDb(streamType, index, deviceType);
+    } else {
+        // Handle the case for lower API levels, maybe throw an exception or return a default value
+        // Example: throw new IllegalStateException("getStreamMinVolume is not supported on API levels below 28.");
+         throw new RuntimeException("Requires API level " + 28);
+    }
+            
         }
         private Object setRingerMode(int ringerMode) {
             audioManager.setRingerMode(ringerMode);
@@ -428,31 +435,57 @@ private static Map<String, Object> encodeAudioDevice(AudioDeviceInfo device) {
             return audioManager.isStreamMute(streamType);
         }
         private List<Map<String, Object>> getAvailableCommunicationDevices() {
-            requireApi(31);
-            devices = audioManager.getAvailableCommunicationDevices();
+
+             if (Build.VERSION.SDK_INT >= 31) {
+        devices = audioManager.getAvailableCommunicationDevices();
             ArrayList<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
             for (AudioDeviceInfo device : devices) {
                 result.add(encodeAudioDevice(device));
             }
             return result;
+    } else {
+        // Handle the case for lower API levels, maybe throw an exception or return a default value
+        // Example: throw new IllegalStateException("getStreamMinVolume is not supported on API levels below 28.");
+         throw new RuntimeException("Requires API level " + 31);
+    }
+            
         }
         private boolean setCommunicationDevice(Integer deviceId) {
-            requireApi(31);
-            for (AudioDeviceInfo device : devices) {
+
+             if (Build.VERSION.SDK_INT >= 31) {
+        for (AudioDeviceInfo device : devices) {
                 if (device.getId() == deviceId) {
                     return audioManager.setCommunicationDevice(device);
                 }
             }
             return false;
+    } else {
+        // Handle the case for lower API levels, maybe throw an exception or return a default value
+        // Example: throw new IllegalStateException("getStreamMinVolume is not supported on API levels below 28.");
+         throw new RuntimeException("Requires API level " + 31);
+    }
+           
         }
         private Map<String, Object> getCommunicationDevice() {
-            requireApi(31);
-            return encodeAudioDevice(audioManager.getCommunicationDevice());
+             if (Build.VERSION.SDK_INT >= 31) {
+        return encodeAudioDevice(audioManager.getCommunicationDevice());
+    } else {
+        // Handle the case for lower API levels, maybe throw an exception or return a default value
+        // Example: throw new IllegalStateException("getStreamMinVolume is not supported on API levels below 28.");
+         throw new RuntimeException("Requires API level " + 31);
+    }
+            
         }
         private Object clearCommunicationDevice() {
-            requireApi(31);
-            audioManager.clearCommunicationDevice();
+              if (Build.VERSION.SDK_INT >= 31) {
+           audioManager.clearCommunicationDevice();
             return null;
+    } else {
+        // Handle the case for lower API levels, maybe throw an exception or return a default value
+        // Example: throw new IllegalStateException("getStreamMinVolume is not supported on API levels below 28.");
+         throw new RuntimeException("Requires API level " + 31);
+    }
+         
         }
         @SuppressWarnings("deprecation")
         private Object setSpeakerphoneOn(boolean enabled) {
@@ -464,13 +497,26 @@ private static Map<String, Object> encodeAudioDevice(AudioDeviceInfo device) {
             return audioManager.isSpeakerphoneOn();
         }
         private Object setAllowedCapturePolicy(int capturePolicy) {
-            requireApi(29);
-            audioManager.setAllowedCapturePolicy(capturePolicy);
+                  if (Build.VERSION.SDK_INT >= 29) {
+           audioManager.setAllowedCapturePolicy(capturePolicy);
             return null;
+    } else {
+        // Handle the case for lower API levels, maybe throw an exception or return a default value
+        // Example: throw new IllegalStateException("getStreamMinVolume is not supported on API levels below 28.");
+         throw new RuntimeException("Requires API level " + 31);
+    }
+            
         }
         private Object getAllowedCapturePolicy() {
-            requireApi(29);
-            return audioManager.getAllowedCapturePolicy();
+                if (Build.VERSION.SDK_INT >= 29) {
+           return audioManager.getAllowedCapturePolicy();
+           
+    } else {
+        // Handle the case for lower API levels, maybe throw an exception or return a default value
+        // Example: throw new IllegalStateException("getStreamMinVolume is not supported on API levels below 28.");
+         throw new RuntimeException("Requires API level " + 31);
+    }
+           
         }
         private Object isBluetoothScoAvailableOffCall() {
             return audioManager.isBluetoothScoAvailableOffCall();
@@ -568,7 +614,12 @@ private static Map<String, Object> encodeAudioDevice(AudioDeviceInfo device) {
             return result;
         }
         private Object getMicrophones() throws IOException {
-            requireApi(28);
+             if (Build.VERSION.SDK_INT < 28) {
+           throw new RuntimeException("Requires API level " + 28);
+    } else {
+       
+    
+           
             ArrayList<Map<String, Object>> result = new ArrayList<>();
             List<MicrophoneInfo> microphones = audioManager.getMicrophones();
             for (MicrophoneInfo microphone : microphones) {
@@ -600,10 +651,14 @@ private static Map<String, Object> encodeAudioDevice(AudioDeviceInfo device) {
             }
             return result;
         }
+        }
 
         private Object isHapticPlaybackSupported() {
-            requireApi(29);
+             if (Build.VERSION.SDK_INT < 29) {
+           throw new RuntimeException("Requires API level " + 28);
+    } else {
             return AudioManager.isHapticPlaybackSupported();
+    }
         }
 
         private void registerNoisyReceiver() {
